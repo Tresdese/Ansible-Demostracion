@@ -71,16 +71,3 @@ El modo check predice cambios, pero no sustituye una ejecución real. No se reco
 
 ## Detener y limpiar
 Dentro de la VM: `exit`. En el anfitrión: `vagrant halt`. Para eliminar únicamente esta VM al terminar: `vagrant destroy` y confirmar la eliminación. Los archivos del proyecto permanecen.
-
-## Publicación opcional en GitHub
-Crear un repositorio vacío y ejecutar en la carpeta del proyecto:
-```bash
-git init
-git add .
-git commit -m "Agrega laboratorio de Ansible con Nginx"
-git branch -M main
-```
-Después, configurar `git remote add origin URL_DEL_REPOSITORIO` con la URL real y ejecutar `git push -u origin main`. No subir llaves, contraseñas ni `.vagrant/`. No se ha creado ni publicado un repositorio automáticamente.
-
-## Alcance de la validación
-Ver `VALIDACION.md`. Las capturas de funcionamiento deben obtenerse al ejecutar el laboratorio: no se incluyen evidencias simuladas. Las versiones que resuelve APT y la box no están congeladas; registrar `ansible --version`, `nginx -v` y `vagrant box list` durante el ensayo.
