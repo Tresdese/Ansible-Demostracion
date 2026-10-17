@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_title | e }}</title>
+  <style>
+    body { background:#10202d; color:#edf4f7; font:20px system-ui;
+           max-width:800px; margin:12vh auto; padding:24px; }
+    h1 { color:#6fe0c5; font-size:48px; }
+    strong { color:#6fe0c5; }
+  </style>
+</head>
+<body>
+  <p>DESARROLLO DE SISTEMAS EN RED</p>
+  <h1>{{ app_title | e }}</h1>
+  <p>{{ app_message | e }}</p>
+  <p>Version: <strong>{{ app_version | e }}</strong></p>
+  <p>Nodo: {{ inventory_hostname | e }}</p>
+  <p>Esta pagina fue desplegada con Ansible.</p>
+</body>
+</html>

@@ -1,0 +1,71 @@
+---
+- name: Configurar servidor web del laboratorio
+  hosts: web
+  become: true
+  tasks:
+    - name: Instalar Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Crear directorio de la aplicacion
+      ansible.builtin.file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+
+    - name: Desplegar pagina desde plantilla
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: "{{ web_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Configurar Nginx con validacion previa
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: "0644"
+        validate: /usr/sbin/nginx -t -c %s
+      notify: Recargar Nginx
+
+    - name: Asegurar servicio activo y habilitado
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Aplicar cambios antes de comprobar HTTP
+      ansible.builtin.meta: flush_handlers
+
+    - name: Comprobar HTTP y contenido desplegado
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ web_port }}/"
+        status_code: 200
+        return_content: true
+      register: respuesta
+      until: respuesta.status == 200
+      retries: 5
+      delay: 2
+      changed_when: false
+      when: not ansible_check_mode
+
+    - name: Verificar version publicada
+      ansible.builtin.assert:
+        that:
+          - "(app_version | string) in respuesta.content"
+        success_msg: "La version solicitada esta publicada"
+      when: not ansible_check_mode
+
+  handlers:
+    - name: Recargar Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
