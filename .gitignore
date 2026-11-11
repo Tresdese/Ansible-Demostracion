@@ -1,0 +1,4 @@
+.vagrant/
+evidencias/
+*.retry
+__pycache__/

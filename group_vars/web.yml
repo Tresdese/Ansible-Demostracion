@@ -1,0 +1,6 @@
+---
+app_title: "Laboratorio Ansible"
+app_message: "Servidor configurado automaticamente"
+app_version: "1.0"
+web_port: 80
+web_root: /var/www/ansible-demo
